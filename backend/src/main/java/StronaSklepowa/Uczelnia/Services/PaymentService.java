@@ -11,14 +11,11 @@ import jakarta.annotation.PostConstruct;
 public class PaymentService {
     @Value("${stripe.api.key}")
     private String stripeApiKey;
-
     @PostConstruct
     public void init() {
         Stripe.apiKey = stripeApiKey;
     }
-
-    public String createCheckoutSession(Long orderId, Double amount) throws Exception {
-        long amountInZlote = (long) (amount * 100);
+    public String createCheckoutSession(Long orderId, Integer amountInGrosze) throws Exception {
         SessionCreateParams params = SessionCreateParams.builder()
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -31,7 +28,7 @@ public class PaymentService {
                                 .setPriceData(
                                         SessionCreateParams.LineItem.PriceData.builder()
                                                 .setCurrency("pln")
-                                                .setUnitAmount(amountInZlote)
+                                                .setUnitAmount(Long.valueOf(amountInGrosze))
                                                 .setProductData(
                                                         SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                 .setName("Zamówienie nr #" + orderId)

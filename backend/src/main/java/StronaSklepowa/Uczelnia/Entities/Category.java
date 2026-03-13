@@ -1,28 +1,30 @@
 package StronaSklepowa.Uczelnia.Entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import java.util.List;
 
 @Entity
 @Table(name = "categories")
-@Getter 
-@Setter 
-@NoArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private String name;
+
+    private String iconUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Category> subCategories;
+    private List<Category> children;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 }

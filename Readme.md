@@ -4,12 +4,9 @@
 
 Żeby odpalić backend: UczelniaApplication.java uruchomić za pomocą gui(w folderze backend)
 
-
-
 Wejście frontendu jest od: http://localhost:5173/
 
 Wyjście backendu jest od: http://localhost:8080/api/
-
 
 application-local.properties utworzyć w backend/src/main/resources i podmienić na swoje klucze
 

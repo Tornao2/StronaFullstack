@@ -10,6 +10,8 @@ public class ProductDTO {
     private String description;
     private Integer priceInGrosze;
     private Integer stockQuantity;
-    private Long categoryId;
+    private String imageUrl;
+    private Long categoryId; 
+    private String categoryName; 
     private List<ProductAttributeDTO> attributes;
 }

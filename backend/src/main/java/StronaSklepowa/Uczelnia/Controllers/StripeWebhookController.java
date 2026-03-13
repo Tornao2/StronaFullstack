@@ -26,29 +26,36 @@ public class StripeWebhookController {
         try {
             Event event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
             if ("checkout.session.completed".equals(event.getType())) {
-                fulfillOrder(getSession(event));
-            } else if ("payment_intent.payment_failed".equals(event.getType())) {
+                Session session = getSession(event);
+                fulfillOrder(session);
+            } 
+            else if ("payment_intent.payment_failed".equals(event.getType())) {
                 PaymentIntent intent = (PaymentIntent) event.getData().getObject();
                 updateStatus(intent.getMetadata().get("orderId"), OrderStatus.CANCELLED); 
             }
             return ResponseEntity.ok("OK");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            System.err.println("Błąd Webhooka: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Webhook Error");
         }
     }
 
     private void fulfillOrder(Session session) {
-        if (session != null) {
-            updateStatus(session.getMetadata().get("orderId"), OrderStatus.PAID);
+        String orderId = session.getMetadata().get("orderId");
+        if (orderId != null) {
+            updateStatus(orderId, OrderStatus.PAID);
         }
     }
 
     private void updateStatus(String orderIdStr, OrderStatus status) {
-        if (orderIdStr != null) {
-            orderRepository.findById(Long.parseLong(orderIdStr)).ifPresent(order -> {
+        try {
+            Long orderId = Long.parseLong(orderIdStr);
+            orderRepository.findById(orderId).ifPresent(order -> {
                 order.setStatus(status);
-                orderRepository.saveAndFlush(order);
+                orderRepository.save(order);
             });
+        } catch (Exception e) {
+            System.err.println("Błąd aktualizacji statusu dla ID: " + orderIdStr);
         }
     }
 
