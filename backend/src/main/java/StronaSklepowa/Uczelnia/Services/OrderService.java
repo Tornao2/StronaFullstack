@@ -28,6 +28,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final PaymentService paymentService; 
+    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public String placeOrderAndGetPaymentUrl(String identifier, List<Long> itemIds) throws Exception {
@@ -48,12 +49,6 @@ public class OrderService {
         for (Long itemId : itemIds) {
             Product product = productRepository.findById(itemId)
                     .orElseThrow(() -> new RuntimeException("Produkt nie istnieje"));
-            int currentStock = (product.getStockQuantity() != null) ? product.getStockQuantity() : 0;
-            if (currentStock < 1) {
-                throw new RuntimeException("Brak towaru: " + product.getName());
-            }
-            product.setStockQuantity(currentStock - 1);
-            productRepository.save(product); 
             OrderItem newItem = new OrderItem();
             newItem.setProduct(product);
             newItem.setQuantity(1); 
@@ -65,6 +60,8 @@ public class OrderService {
         }
         order.setTotalAmountInGrosze(totalSum);
         Order savedOrder = orderRepository.save(order);
+        OrderDTO orderDto = mapOrderToDTO(savedOrder);
+        kafkaProducerService.sendOrderUpdate(orderDto);
         return paymentService.createCheckoutSession(
             savedOrder.getId(), 
             savedOrder.getTotalAmountInGrosze() 
@@ -98,7 +95,6 @@ public class OrderService {
         dto.setShippingAddress(order.getShippingAddress());
         dto.setShippingCity(order.getShippingCity());
         dto.setShippingZipCode(order.getShippingZipCode());
-        
         dto.setItems(order.getItems().stream().map(item -> {
             OrderItemDTO itemDto = new OrderItemDTO();
             itemDto.setProductId(item.getProduct().getId());

@@ -1,0 +1,104 @@
+AuthController.java
+
+POST http://localhost:8080/api/auth/register
+W body RegisterRequest (w DTO folderze kod)
+Rejestruje nowego użytkownika
+
+GET http://localhost:8080/api/auth/status
+Sprawdza czy sesja użytkownika jest nadal aktualna
+
+CategoryController.java
+
+GET http://localhost:8080/api/categories
+Pobiera główne kategorie
+
+GET http://localhost:8080/api/categories/{id}
+Pobiera szczegóły danej kategorii
+
+POST http://localhost:8080/api/categories
+Tworzenie nowej kategorii
+MUSI KONTO MIEĆ ROLE ADMIN
+
+PUT http://localhost:8080/api/categories/{id}
+Aktualizacja istniejącej kategorii
+MUSI KONTO MIEĆ ROLE ADMIN
+
+DELETE http://localhost:8080/api/categories/{id}
+Usuwanie kategorii
+MUSI KONTO MIEĆ ROLE ADMIN
+
+OrderController.java
+
+POST http://localhost:8080/api/orders/create
+Tworzy zamówienie i zwraca link do płatności
+W body lista id produktów to zamówienia
+
+OrderItemController.java
+
+GET http://localhost:8080/api/admin/order-items/order/{orderId}
+Pobiera listę produktów co wchodzą do składu w danym zamówieniu 
+MUSI KONTO MIEĆ ROLE ADMIN
+
+ProductAttributeController.java
+
+GET http://localhost:8080/api/attributes/product/{productId}
+Pobiera listę atrybutów dla danego produktu
+
+POST http://localhost:8080/api/attributes
+Dodaje nowy atrybut do produktu
+W body ProductVariable(W entities kod)
+MUSI KONTO MIEĆ ROLE ADMIN
+
+ProductController.java
+
+GET http://localhost:8080/api/products
+Pobiera listę wszystkich produktów 
+
+GET http://localhost:8080/api/products/{id}
+Pobiera szczegóły konkretnego produktu lub 404 jeśli nie istnieje 
+
+GET http://localhost:8080/api/products/category/{categoryId}
+Pobiera listę produktów należących do danej kategorii
+
+POST http://localhost:8080/api/products
+Dodaje nowy produkt 
+W body productdto (kod w folderze dtos)
+KONTO MUSI MIEĆ ROLĘ ADMIN 
+
+DELETE http://localhost:8080/api/products/{id}
+Usuwa produkt 
+KONTO MUSI MIEĆ ROLĘ ADMIN 
+
+UserController.java
+
+GET http://localhost:8080/api/users/me
+Pobiera dane aktualnie zalogowanego użytkownika 
+
+PUT http://localhost:8080/api/users/me
+Aktualizuje dane zalogowanego użytkownika 
+W body userdto
+
+GET http://localhost:8080/api/users/me/orders
+Pobiera listę wszystkich zamówień użytkownika 
+
+GET http://localhost:8080/api/users/me/orders/{orderId}
+Pobiera szczegóły danego zamówienia użytkownika 
+
+DELETE http://localhost:8080/api/users/me
+Całkowicie usunięcie konta
+
+OAUTH ZWIĄZANE
+
+GET http://localhost:8080/oauth2/authorization/google
+Przekierowanie do strony logowania google 
+
+LOGOWANIE 
+
+POST http://localhost:8080/api/login
+Content-Type: application/x-www-form-urlencoded w nagłówku 
+W body: 
+username -> wartość 
+password -> wartość
+
+POST http://localhost:8080/api/logout
+Wylogowanie i unieważnienie sesji 

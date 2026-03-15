@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 public class ProductAttributeController {
-
     private final ProductAttributeService attributeService;
 
     @PostMapping

@@ -21,9 +21,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
-            if (request.getPassword() == null || request.getPassword().length() < 6) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Hasło musi mieć co najmniej 6 znaków"));
-            }
             UserDTO registeredUser = userService.registerUser(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
         } catch (RuntimeException e) {
