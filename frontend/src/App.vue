@@ -1,34 +1,30 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import {BApp, BNavbar, BNavbarNav, BNavItem, BNavText} from "bootstrap-vue-next";
 
-const products = ref([])
-
-const fetchProducts = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/api/products')
-    products.value = response.data
-  } catch (error) {
-    console.error("Błąd pobierania danych:", error)
-  }
-}
-onMounted(fetchProducts)
 </script>
 
 <template>
-  <div class="container">
-    <h1>Moja Uczelnia - Sklep</h1>   
-    <div v-if="products.length === 0">Ładowanie produktów lub brak danych...</div>
-    <ul v-else>
-      <li v-for="product in products" :key="product.id">
-        <strong>{{ product.name }}</strong> - {{ product.price }} zł
-        <p>{{ product.description }}</p>
-      </li>
-    </ul>
-  </div>
+  <BApp>
+    <BNavbar fixed="top" variant="dark" class="w-100 bg-dark" container="fluid">
+      <BNavbarNav class="me-auto">
+        <BNavText>KOMPUTORNIXENSTREN</BNavText>
+        <BNavItem to="/home">Strona główna</BNavItem>
+        <BNavItem to="/laptops">Laptopy</BNavItem>
+        <BNavItem to="/cpus">Procesory</BNavItem>
+        <BNavItem to="/gpus">Karty graficzne</BNavItem>
+        <BNavItem to="/ram">RAM</BNavItem>
+        <BNavItem to="/motherboards">Płyty główne</BNavItem>
+        <BNavItem to="/supplies">Zasilacze</BNavItem>
+        <BNavItem to="/cooling">Chłodzenia</BNavItem>
+        <BNavItem to="/preassembled">Gotowe stacje</BNavItem>
+      </BNavbarNav>
+    </BNavbar>
+
+    <router-view/>
+
+  </BApp>
 </template>
 
 <style>
-.container { padding: 20px; font-family: sans-serif; }
-li { margin-bottom: 20px; border-bottom: 1px solid #ccc; list-style: none; }
+
 </style>
