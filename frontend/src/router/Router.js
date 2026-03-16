@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from "vue-router";
 
 import Home from '../views/Home.vue'
 import Products from "../views/Products.vue";
+import Product from "../views/Product.vue";
 
 const routes = [
     {
@@ -67,6 +68,10 @@ const routes = [
         props: {
             category: 'preassembled'
         }
+    },
+    {
+        path: '/product/:id',
+        component: Product,
     },
 ]
 
