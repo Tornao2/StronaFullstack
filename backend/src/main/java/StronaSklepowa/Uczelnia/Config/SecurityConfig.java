@@ -33,11 +33,12 @@ public class SecurityConfig {
             .exceptionHandling(ex -> ex.authenticationEntryPoint((req, res, authEx) -> res.sendError(401, "Unauthorized")))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/categories/**", "/api/attributes/**").permitAll()
-                .requestMatchers("/api/auth/**", "/login/**", "/oauth2/**", "/api/webhooks/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/products/**", "/api/categories/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/products/**", "/api/categories/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/categories/**").hasAuthority("ADMIN")
+                .requestMatchers("/api/auth/**", "/api/login/**", "/oauth2/**", "/api/webhooks/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/products/**", "/api/categories/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/products/**", "/api/categories/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/categories/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
+
             )
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))

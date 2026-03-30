@@ -74,7 +74,12 @@ public class ProductService {
                 .map(this::mapToDTO)
                 .orElseThrow(() -> new RuntimeException("Produkt o ID " + id + " nie istnieje."));
     }
-    
+    public List<ProductDTO> searchProducts(String query) {
+        return productRepository.findByNameContainingIgnoreCaseAndActiveTrue(query)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
     private ProductDTO mapToDTO(Product product) {
         ProductDTO dto = new ProductDTO();
         dto.setId(product.getId());

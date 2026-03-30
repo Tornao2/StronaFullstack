@@ -23,7 +23,13 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllActiveProducts());
     }
-
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam String q) {
+        if (q == null || q.trim().length() < 2) {
+            return ResponseEntity.ok(List.of());
+        }
+        return ResponseEntity.ok(productService.searchProducts(q.trim()));
+    }
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable Long id) {
         try {

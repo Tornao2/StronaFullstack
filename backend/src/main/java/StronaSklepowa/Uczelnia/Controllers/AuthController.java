@@ -1,7 +1,7 @@
 package StronaSklepowa.Uczelnia.Controllers;
 
-import StronaSklepowa.Uczelnia.DTOs.RegisterRequest; 
-import StronaSklepowa.Uczelnia.DTOs.UserDTO;      
+import StronaSklepowa.Uczelnia.DTOs.RegisterRequest;
+import StronaSklepowa.Uczelnia.DTOs.UserDTO;
 import StronaSklepowa.Uczelnia.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173") 
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final UserService userService;
@@ -38,3 +38,4 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("username", principal.getName(), "authenticated", true));
     }
 }
+
