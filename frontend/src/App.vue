@@ -1,9 +1,21 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { BApp, BNavbar, BNavbarNav, BNavItem } from 'bootstrap-vue-next'
 import CartSidebar from './components/CartSidebar.vue'
 import SearchBar from './components/SearchBar.vue'
 import { useCart } from './stores/cart.js'
+import { useRouter } from 'vue-router'
+import { useAuth } from './composables/useAuth.js'
+
+const router = useRouter()
+const { user, isLoggedIn, checkAuth, logout } = useAuth()
+
+onMounted(() => checkAuth())
+
+async function handleLogout() {
+  await logout()
+  router.push('/home')
+}
 
 const cartOpen = ref(false)
 const { totalCount } = useCart()
@@ -31,9 +43,19 @@ const { totalCount } = useCart()
             </svg>
             <span v-if="totalCount > 0" class="cart-badge">{{ totalCount }}</span>
           </button>
+
+          <!-- Auth -->
           <div class="nav-auth">
-            <router-link to="/login" class="btn btn-outline-light btn-sm">Zaloguj się</router-link>
-            <router-link to="/register" class="btn btn-danger btn-sm">Rejestracja</router-link>
+            <template v-if="!isLoggedIn">
+              <router-link to="/login" class="btn btn-outline-light btn-sm">Zaloguj się</router-link>
+              <router-link to="/register" class="btn btn-danger btn-sm">Rejestracja</router-link>
+            </template>
+            <template v-else>
+              <router-link to="/profile" class="btn btn-outline-light btn-sm">
+                {{ user?.fullName?.split(' ')[0] ?? 'Profil' }}
+              </router-link>
+              <button class="btn btn-outline-danger btn-sm" @click="handleLogout">Wyloguj</button>
+            </template>
           </div>
         </div>
 
@@ -119,6 +141,7 @@ const { totalCount } = useCart()
   align-items: center;
   justify-content: center;
 }
+
 .nav-auth {
   display: flex;
   align-items: center;
