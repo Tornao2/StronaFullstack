@@ -14,7 +14,7 @@
       <div v-else-if="filteredProducts.length === 0" class="alert alert-warning">
         {{ emptyMessage }}
       </div>
-<!--odstep miedzy produktami -góra i dół-->
+      <!--odstep miedzy produktami -góra i dół-->
       <div v-else class="row g-4" style="row-gap: 2rem;">
         <div
             v-for="product in filteredProducts"
@@ -58,8 +58,8 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import {computed, onMounted, ref, watch} from 'vue'
+import {useRoute} from 'vue-router'
 import axios from 'axios'
 
 const route = useRoute()
@@ -77,13 +77,13 @@ const error = ref('')
 const searchQuery = computed(() => (route.query.q || '').toString().trim())
 
 const categoryNameMap = {
-  '/laptops':      'Laptopy',
-  '/cpus':         'Procesory',
-  '/gpus':         'Karty graficzne',
-  '/ram':          'RAM',
-  '/motherboards': 'Plyty glowne',
-  '/supplies':     'Zasilacze',
-  '/cooling':      'Chlodzenia',
+  '/laptops': 'Laptopy',
+  '/cpus': 'Procesory',
+  '/gpus': 'Karty graficzne',
+  '/ram': 'RAM',
+  '/motherboards': 'Płyty główne',
+  '/supplies': 'Zasilacze',
+  '/cooling': 'Chłodzenia',
   '/preassembled': 'Gotowe stacje',
 }
 
@@ -126,7 +126,7 @@ function formatPrice(product) {
 }
 
 async function loadCategories() {
-  const { data } = await api.get('/categories')
+  const {data} = await api.get('/categories')
   categories.value = data
 }
 
@@ -144,7 +144,7 @@ async function loadProducts() {
     await loadCategories()
 
     if (route.path === '/search') {
-      const { data } = await api.get('/products')
+      const {data} = await api.get('/products')
       products.value = data
     } else if (categoryNameMap[route.path]) {
       const categoryId = getCategoryIdFromRoute()
@@ -152,7 +152,7 @@ async function loadProducts() {
         products.value = []
         return
       }
-      const { data } = await api.get(`/products/category/${categoryId}`)
+      const {data} = await api.get(`/products/category/${categoryId}`)
       products.value = data
     } else {
       products.value = []
@@ -188,7 +188,7 @@ watch(() => route.fullPath, loadProducts)
 
 .product-card-link:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
   color: inherit;
 }
 
