@@ -7,10 +7,15 @@ import PaymentSuccess from '../views/PaymentSuccess.vue'
 import PaymentFailed from '../views/PaymentFailed.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import Profile from '../views/Profile.vue'
 
 const routes = [
     { path: '/', redirect: '/home' },
     { path: '/home', component: Home },
+
+    { path: '/login',    component: Login },
+    { path: '/register', component: Register },
+    { path: '/profile',  component: Profile },
 
     // Kategorie
     { path: '/laptops',      component: Products, props: { category: 'laptops' } },
@@ -29,8 +34,7 @@ const routes = [
     // Płatność — muszą pasować do URL-i w PaymentService.java
     { path: '/payment-success', component: PaymentSuccess },
     { path: '/payment-failed',  component: PaymentFailed },
-    { path: '/login',    component: Login },
-    { path: '/register', component: Register },
+
 ]
 
 const router = createRouter({

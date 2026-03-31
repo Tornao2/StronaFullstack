@@ -46,7 +46,7 @@
             </div>
           </transition>
 
-          <div class="d-flex gap-3 flex-wrap">
+          <div class="d-flex gap-5 flex-wrap mt-2">
             <button class="btn btn-outline-success btn-lg"
                     :disabled="getStock(product) <= 0"
                     @click="handleAddToCart">
