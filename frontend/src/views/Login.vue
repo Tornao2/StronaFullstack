@@ -54,7 +54,9 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { useAuth } from '../composables/useAuth.js'
 
+const { checkAuth } = useAuth()
 const router = useRouter()
 
 const form = ref({ email: '', password: '' })
@@ -74,7 +76,7 @@ async function login() {
       withCredentials: true,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
-
+    await checkAuth()
     router.push('/home')
   } catch (err) {
     if (err.response?.status === 401) {
