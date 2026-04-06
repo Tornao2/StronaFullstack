@@ -41,12 +41,12 @@ public class OrderService {
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
         order.setStatus(OrderStatus.PENDING);
-//        order.setShippingAddress(user.getAddress());
-//        order.setShippingCity(user.getCity());
-//        order.setShippingZipCode(user.getZipCode());
-        order.setShippingAddress(user.getAddress() != null ? user.getAddress() : "Brak adresu");
-        order.setShippingCity(user.getCity() != null ? user.getCity() : "Brak miasta");
-        order.setShippingZipCode(user.getZipCode() != null ? user.getZipCode() : "00-000");
+        order.setShippingAddress(user.getAddress());
+        order.setShippingCity(user.getCity());
+        order.setShippingZipCode(user.getZipCode());
+//        order.setShippingAddress(user.getAddress() != null ? user.getAddress() : "Brak adresu");
+//        order.setShippingCity(user.getCity() != null ? user.getCity() : "Brak miasta");
+//        order.setShippingZipCode(user.getZipCode() != null ? user.getZipCode() : "00-000");
         order.setItems(new ArrayList<>());
         int totalSum = 0;
         for (Long itemId : itemIds) {

@@ -3,8 +3,7 @@
     <div v-if="isOpen" class="cart-overlay" @click.self="$emit('close')">
       <div class="cart-sidebar">
         <div class="cart-header">
-          <h5 class="mb-0">Koszyk <span class="badge bg-primary">{{ totalCount }}</span></h5>
-          <button class="btn-close btn-close-white" @click="$emit('close')" />
+          <h5 class="mb-0">Koszyk <span class="badge bg-danger">{{ totalCount }}</span></h5>          <button class="close-btn" @click="$emit('close')">✕</button>
         </div>
         <div class="cart-body">
           <div v-if="items.length === 0" class="empty-cart">
@@ -98,4 +97,21 @@ async function checkout() {
 .cart-footer { padding: 16px 20px; border-top: 2px solid #f0f0f0; background: #fafafa; }
 .slide-enter-active, .slide-leave-active { transition: opacity 0.25s ease; }
 .slide-enter-from, .slide-leave-to { opacity: 0; }
+.close-btn {
+  background: #e3342f;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  background: #cc2a26;
+}
 </style>

@@ -55,17 +55,17 @@
 
               <div class="mb-3">
                 <label class="form-label">Adres</label>
-                <input v-model="form.address" type="text" class="form-control" placeholder="ul. Przykladowa 1/2" />
+                <input v-model="form.address" type="text" class="form-control" placeholder="ul.Al.Tysiąclecia Państwa polskiego 7" />
               </div>
 
               <div class="row mb-4">
                 <div class="col-5">
                   <label class="form-label">Kod pocztowy</label>
-                  <input v-model="form.zipCode" type="text" class="form-control" placeholder="00-000" />
+                  <input v-model="form.zipCode" type="text" class="form-control" placeholder="25-314" />
                 </div>
                 <div class="col-7">
                   <label class="form-label">Miasto</label>
-                  <input v-model="form.city" type="text" class="form-control" placeholder="Warszawa" />
+                  <input v-model="form.city" type="text" class="form-control" placeholder="Kiece" />
                 </div>
               </div>
 

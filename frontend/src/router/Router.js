@@ -8,6 +8,7 @@ import PaymentFailed from '../views/PaymentFailed.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Profile from '../views/Profile.vue'
+import Orders from "../views/Orders.vue";
 
 const routes = [
     { path: '/', redirect: '/home' },
@@ -34,6 +35,9 @@ const routes = [
     // Płatność — muszą pasować do URL-i w PaymentService.java
     { path: '/payment-success', component: PaymentSuccess },
     { path: '/payment-failed',  component: PaymentFailed },
+
+    // Moje zamowienia
+    { path: '/orders',       component: Orders },
 
 ]
 

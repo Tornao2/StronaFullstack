@@ -31,7 +31,7 @@ export function useAuth() {
 
     async function logout() {
         try {
-            await api.post('/api/logout')
+            await api.post('/logout')
         } catch {}
         user.value = null
         checked.value = false
