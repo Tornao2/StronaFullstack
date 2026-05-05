@@ -7,7 +7,7 @@
       <div v-else-if="product" class="row g-4">
         <div class="col-md-5">
           <img v-if="getImage(product)" :src="getImage(product)" :alt="getName(product)"
-               class="img-fluid rounded shadow-sm product-image" />
+               class="img-fluid rounded shadow-sm product-image"/>
           <div v-else class="no-image rounded shadow-sm">Brak zdjecia</div>
         </div>
 
@@ -26,7 +26,7 @@
           </p>
 
           <p class="mb-4">
-            <strong>Opis:</strong><br />{{ getDescription(product) }}
+            <strong>Opis:</strong><br/>{{ getDescription(product) }}
           </p>
 
           <div v-if="attributes.length" class="mb-4">
@@ -56,7 +56,7 @@
             <button class="btn btn-success btn-lg"
                     :disabled="getStock(product) <= 0 || buyLoading"
                     @click="handleBuyNow">
-              <span v-if="buyLoading" class="spinner-border spinner-border-sm me-2" />
+              <span v-if="buyLoading" class="spinner-border spinner-border-sm me-2"/>
               {{ buyLoading ? 'Przekierowanie...' : 'Kup teraz' }}
             </button>
           </div>
@@ -69,14 +69,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import {onMounted, ref} from 'vue'
+import {useRoute} from 'vue-router'
 import axios from 'axios'
-import { useCart } from '../stores/cart.js'
+import {useCart} from '../stores/cart.js'
 
 const route = useRoute()
-const { addToCart } = useCart()
-const api = axios.create({ baseURL: 'http://localhost:8080/api', withCredentials: true })
+const {addToCart} = useCart()
+const api = axios.create({baseURL: 'http://localhost:8080/api', withCredentials: true})
 
 const product = ref(null)
 const attributes = ref([])
@@ -86,10 +86,21 @@ const addedToast = ref(false)
 const buyLoading = ref(false)
 const buyError = ref('')
 
-function getName(p) { return p.name ?? 'Brak nazwy' }
-function getDescription(p) { return p.description ?? 'Brak opisu' }
-function getImage(p) { return p.imageUrl ?? p.image_url ?? '' }
-function getStock(p) { return p.stockQuantity ?? p.stock_quantity ?? 0 }
+function getName(p) {
+  return p.name ?? 'Brak nazwy'
+}
+
+function getDescription(p) {
+  return p.description ?? 'Brak opisu'
+}
+
+function getImage(p) {
+  return p.imageUrl ?? p.image_url ?? ''
+}
+
+function getStock(p) {
+  return p.stockQuantity ?? p.stock_quantity ?? 0
+}
 
 function formatPrice(p) {
   const price = p.priceInGrosze ?? p.price_in_grosze ?? null
@@ -100,31 +111,54 @@ function formatPrice(p) {
 function handleAddToCart() {
   addToCart(product.value)
   addedToast.value = true
-  setTimeout(() => { addedToast.value = false }, 2000)
+  setTimeout(() => {
+    addedToast.value = false
+  }, 2000)
 }
 
 async function handleBuyNow() {
   buyError.value = ''
   buyLoading.value = true
   try {
-    const { data } = await api.post('/orders/create', [product.value.id])
-    if (data.paymentUrl) window.location.href = data.paymentUrl
+    const response = await api.post('/orders/create', [product.value.id])
+    const orderId = response.data.orderId;
+
+    await pollForPaymentUrl(orderId)
   } catch (err) {
-    if (err.response?.status === 401) {
-      buyError.value = 'Musisz byc zalogowany, aby kupic produkt.'
-    } else {
-      buyError.value = err.response?.data?.error ?? 'Wystapil blad. Sprobuj ponownie.'
-    }
-  } finally {
     buyLoading.value = false
+    buyError.value = err.response?.data?.error ?? 'Błąd serwera'
   }
+}
+
+async function pollForPaymentUrl(orderId) {
+  const maxAttempts = 15
+  let attempts = 0
+
+  const interval = setInterval(async () => {
+    try {
+      attempts++
+      const response = await api.get(`/orders/${orderId}`)
+
+      if (response.data.paymentUrl) {
+        clearInterval(interval)
+        window.location.href = response.data.paymentUrl
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval)
+        buyLoading.value = false
+        buyError.value = "Przekroczono czas oczekiwania na płatność."
+      }
+    } catch (err) {
+      //clearInterval(interval)
+      buyLoading.value = false
+    }
+  }, 2000)
 }
 
 async function loadProduct() {
   loading.value = true
   error.value = ''
   try {
-    const { data } = await api.get(`/products/${route.params.id}`)
+    const {data} = await api.get(`/products/${route.params.id}`)
     product.value = data
     try {
       const attrRes = await api.get(`/attributes/product/${route.params.id}`)
@@ -143,9 +177,32 @@ onMounted(loadProduct)
 </script>
 
 <style scoped>
-.product-page { min-height: 100vh; background: #f5f7fb; }
-.product-image { width: 100%; max-height: 420px; object-fit: cover; }
-.no-image { min-height: 420px; display: flex; align-items: center; justify-content: center; background: #e9ecef; color: #6c757d; font-weight: 700; }
-.fade-enter-active, .fade-leave-active { transition: opacity 0.4s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.product-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.product-image {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+}
+
+.no-image {
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9ecef;
+  color: #6c757d;
+  font-weight: 700;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
 </style>

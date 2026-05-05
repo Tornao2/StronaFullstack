@@ -1,7 +1,7 @@
 package StronaSklepowa.Uczelnia.Controllers;
 
 import StronaSklepowa.Uczelnia.DTOs.OrderItemDTO;
-import StronaSklepowa.Uczelnia.Repositories.OrderItemRepository;
+import StronaSklepowa.Uczelnia.OrderMicroservice.Repositories.OrderItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

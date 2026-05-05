@@ -2,8 +2,8 @@ package StronaSklepowa.Uczelnia.Controllers;
 
 import StronaSklepowa.Uczelnia.DTOs.OrderDTO;
 import StronaSklepowa.Uczelnia.DTOs.UserDTO;
-import StronaSklepowa.Uczelnia.Services.OrderService;
-import StronaSklepowa.Uczelnia.Services.UserService;
+import StronaSklepowa.Uczelnia.OrderMicroservice.Services.OrderService;
+import StronaSklepowa.Uczelnia.UserMicroservice.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

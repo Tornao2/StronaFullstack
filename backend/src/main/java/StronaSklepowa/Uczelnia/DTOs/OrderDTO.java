@@ -1,6 +1,6 @@
 package StronaSklepowa.Uczelnia.DTOs;
 
-import StronaSklepowa.Uczelnia.Entities.OrderStatus;
+import StronaSklepowa.Uczelnia.OrderMicroservice.Entities.OrderStatus;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,5 +14,6 @@ public class OrderDTO {
     private String shippingAddress;
     private String shippingCity;
     private String shippingZipCode;
+    private String paymentUrl;
     private List<OrderItemDTO> items;
 }

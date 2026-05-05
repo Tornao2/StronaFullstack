@@ -1,7 +1,7 @@
 package StronaSklepowa.Uczelnia.DTOs;
 
 import lombok.Data;
-import StronaSklepowa.Uczelnia.Entities.Role;
+import StronaSklepowa.Uczelnia.UserMicroservice.Entities.Role;
 
 @Data
 public class UserDTO {

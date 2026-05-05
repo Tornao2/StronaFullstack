@@ -66,7 +66,7 @@ async function checkout() {
   checkoutLoading.value = true
   try {
     const { data } = await api.post('/orders/create', toOrderPayload())
-    if (data.paymentUrl) window.location.href = data.paymentUrl
+    if (data.response) window.location.href = data.response
   } catch (err) {
     if (err.response?.status === 401) {
       checkoutError.value = 'Musisz byc zalogowany, aby zlozyc zamowienie.'

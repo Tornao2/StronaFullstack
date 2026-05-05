@@ -1,6 +1,6 @@
 package StronaSklepowa.Uczelnia.Config;
 
-import StronaSklepowa.Uczelnia.Services.CustomOAuth2UserService;
+import StronaSklepowa.Uczelnia.UserMicroservice.Services.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

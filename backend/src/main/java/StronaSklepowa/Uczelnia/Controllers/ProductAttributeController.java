@@ -1,8 +1,8 @@
 package StronaSklepowa.Uczelnia.Controllers;
 
 import StronaSklepowa.Uczelnia.DTOs.ProductAttributeDTO;
-import StronaSklepowa.Uczelnia.Entities.ProductAttribute;
-import StronaSklepowa.Uczelnia.Services.ProductAttributeService;
+import StronaSklepowa.Uczelnia.ProductMicroservice.Entities.ProductAttribute;
+import StronaSklepowa.Uczelnia.ProductMicroservice.Services.ProductAttributeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -7,8 +7,8 @@ import com.stripe.model.Event;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
-import StronaSklepowa.Uczelnia.Entities.OrderStatus;
-import StronaSklepowa.Uczelnia.Repositories.OrderRepository;
+import StronaSklepowa.Uczelnia.OrderMicroservice.Entities.OrderStatus;
+import StronaSklepowa.Uczelnia.OrderMicroservice.Repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 
 @RestController
