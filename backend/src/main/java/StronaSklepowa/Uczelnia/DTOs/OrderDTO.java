@@ -15,5 +15,6 @@ public class OrderDTO {
     private String shippingCity;
     private String shippingZipCode;
     private String paymentUrl;
+    private String customerEmail;
     private List<OrderItemDTO> items;
 }

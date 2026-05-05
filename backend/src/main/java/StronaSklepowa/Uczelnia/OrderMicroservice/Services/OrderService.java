@@ -108,6 +108,7 @@ public class OrderService {
         dto.setShippingAddress(order.getShippingAddress());
         dto.setShippingCity(order.getShippingCity());
         dto.setShippingZipCode(order.getShippingZipCode());
+        dto.setCustomerEmail(order.getUser().getEmail());
         dto.setPaymentUrl(order.getPaymentUrl());
         dto.setItems(order.getItems().stream().map(item -> {
             OrderItemDTO itemDto = new OrderItemDTO();

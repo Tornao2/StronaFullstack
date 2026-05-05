@@ -24,6 +24,7 @@ public class PaymentService {
     }
 
     private final OrderRepository orderRepository;
+    private final KafkaPaymentService kafkaPaymentService;
 
     @KafkaListener(topics = "order-events", groupId = "payment-group")
     public void createCheckoutSession(OrderDTO orderDTO) throws Exception {
@@ -52,6 +53,7 @@ public class PaymentService {
                 .build();
         Session session = Session.create(params);
         updateOrderWithPaymentUrl(orderDTO.getId(), session.getUrl());
+        kafkaPaymentService.sendPaymentEvent(orderDTO);
     }
 
     private void updateOrderWithPaymentUrl(Long orderId, String url) {
