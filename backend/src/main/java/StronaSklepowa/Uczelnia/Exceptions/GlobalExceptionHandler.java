@@ -17,18 +17,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = ex.getBindingResult()
-            .getFieldErrors()
-            .stream()
-            .collect(Collectors.toMap(
-                FieldError::getField,
-                fieldError -> fieldError.getDefaultMessage() != null ? fieldError.getDefaultMessage() : "Błąd walidacji"
-            ));
+                .getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        fieldError -> fieldError.getDefaultMessage() != null ? fieldError.getDefaultMessage() : "Błąd walidacji"
+                ));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-            "timestamp", LocalDateTime.now().toString(),
-            "status", HttpStatus.BAD_REQUEST.value(),
-            "errors", errors 
+                "timestamp", LocalDateTime.now().toString(),
+                "status", HttpStatus.BAD_REQUEST.value(),
+                "errors", errors
         ));
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, String>> handleIncompleteProfile(IllegalStateException ez) {
+        if ("INCOMPLETE_PROFILE".equals(ez.getMessage())) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Map.of("error", "Uzupełnij dane profile!", "code", "INCOMPLETE_PROFILE"));
+        }
+        return ResponseEntity.badRequest().body(Map.of("error", ez.getMessage()));
     }
 
     @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
@@ -43,9 +51,9 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<Map<String, Object>> createResponse(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(Map.of(
-            "timestamp", LocalDateTime.now().toString(),
-            "message", message,
-            "status", status.value()
+                "timestamp", LocalDateTime.now().toString(),
+                "message", message,
+                "status", status.value()
         ));
     }
 }

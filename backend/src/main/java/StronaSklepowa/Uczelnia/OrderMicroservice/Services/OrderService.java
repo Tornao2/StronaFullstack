@@ -48,6 +48,11 @@ public class OrderService {
 //        order.setShippingAddress(user.getAddress() != null ? user.getAddress() : "Brak adresu");
 //        order.setShippingCity(user.getCity() != null ? user.getCity() : "Brak miasta");
 //        order.setShippingZipCode(user.getZipCode() != null ? user.getZipCode() : "00-000");
+
+        if (isProfileIncomplete(user)) {
+            throw new IllegalStateException("INCOMPLETE_PROFILE");
+        }
+
         order.setItems(new ArrayList<>());
         int totalSum = 0;
         for (Long itemId : itemIds) {
@@ -73,6 +78,13 @@ public class OrderService {
         });
 
         return savedOrder.getId();
+    }
+
+    private boolean isProfileIncomplete(User user) {
+        return user.getAddress() == null || user.getAddress().isBlank() ||
+                user.getCity() == null || user.getCity().isBlank() ||
+                user.getPhoneNumber() == null || user.getPhoneNumber().isBlank() ||
+                user.getZipCode() == null || user.getZipCode().isBlank();
     }
 
     public List<OrderDTO> getOrdersByUserEmail(String email) {

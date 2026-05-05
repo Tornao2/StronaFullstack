@@ -65,17 +65,45 @@ async function checkout() {
   checkoutError.value = ''
   checkoutLoading.value = true
   try {
-    const { data } = await api.post('/orders/create', toOrderPayload())
-    if (data.response) window.location.href = data.response
+    const response = await api.post('/orders/create', toOrderPayload())
+    const orderId = response.data.orderId
+
+    await pollForPaymentUrl(orderId)
   } catch (err) {
     if (err.response?.status === 401) {
       checkoutError.value = 'Musisz byc zalogowany, aby zlozyc zamowienie.'
+    } else if (err.response?.data?.error === "INCOMPLETE_PROFILE") {
+      checkoutError.value = "Dane twojego konta są niepełne. Wejdź do swojego profilu i je wypełnij, po czym ponów transakcję."
     } else {
       checkoutError.value = err.response?.data?.error ?? 'Wystapil blad podczas skladania zamowienia.'
     }
   } finally {
     checkoutLoading.value = false
   }
+}
+
+async function pollForPaymentUrl(orderId) {
+  const maxAttempts = 15
+  let attempts = 0
+
+  const interval = setInterval(async () => {
+    try {
+      attempts++
+      const response = await api.get(`/orders/${orderId}`)
+
+      if (response.data.paymentUrl) {
+        clearInterval(interval)
+        window.location.href = response.data.paymentUrl
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval)
+        buyLoading.value = false
+        buyError.value = "Przekroczono czas oczekiwania na płatność."
+      }
+    } catch (err) {
+      //clearInterval(interval)
+      buyLoading.value = false
+    }
+  }, 2000)
 }
 </script>
 

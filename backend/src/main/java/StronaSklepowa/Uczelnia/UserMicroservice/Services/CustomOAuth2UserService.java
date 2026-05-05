@@ -24,7 +24,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
-        String googleId = oAuth2User.getAttribute("sub"); 
+        String googleId = oAuth2User.getAttribute("sub");
         User user = userService.processOAuthPostLogin(email, googleId, name);
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().name()));
         return new DefaultOAuth2User(

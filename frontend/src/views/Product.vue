@@ -125,8 +125,15 @@ async function handleBuyNow() {
 
     await pollForPaymentUrl(orderId)
   } catch (err) {
+    if (err.response?.status === 401) {
+      buyError.value = 'Musisz byc zalogowany, aby złożyć zamowienie.'
+    } else if (err.response?.data?.error === "INCOMPLETE_PROFILE") {
+      buyError.value = "Dane twojego konta są niepełne. Wejdź do swojego profilu i je wypełnij, po czym ponów transakcję."
+    } else {
+      buyError.value = err.response?.data?.error ?? 'Wystapil blad podczas skladania zamowienia.'
+    }
+  } finally {
     buyLoading.value = false
-    buyError.value = err.response?.data?.error ?? 'Błąd serwera'
   }
 }
 
