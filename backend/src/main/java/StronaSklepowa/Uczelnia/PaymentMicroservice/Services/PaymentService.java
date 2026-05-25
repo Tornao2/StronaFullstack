@@ -1,6 +1,7 @@
 package StronaSklepowa.Uczelnia.PaymentMicroservice.Services;
 
 import StronaSklepowa.Uczelnia.DTOs.OrderDTO;
+import StronaSklepowa.Uczelnia.DTOs.ProcessedPaymentDTO;
 import StronaSklepowa.Uczelnia.OrderMicroservice.Entities.Order;
 import StronaSklepowa.Uczelnia.OrderMicroservice.Repositories.OrderRepository;
 import com.stripe.Stripe;
@@ -52,15 +53,9 @@ public class PaymentService {
                 )
                 .build();
         Session session = Session.create(params);
-        updateOrderWithPaymentUrl(orderDTO.getId(), session.getUrl());
-        kafkaPaymentService.sendPaymentEvent(orderDTO);
-    }
-
-    private void updateOrderWithPaymentUrl(Long orderId, String url) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono zamowienia: " + orderId));
-        order.setPaymentUrl(url);
-        //order.setStatus();
-        orderRepository.save(order);
+        ProcessedPaymentDTO processedPaymentDTO = new ProcessedPaymentDTO();
+        processedPaymentDTO.setOrder(orderDTO);
+        processedPaymentDTO.setUrl(session.getUrl());
+        kafkaPaymentService.sendPaymentEvent(processedPaymentDTO);
     }
 }

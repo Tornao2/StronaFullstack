@@ -1,6 +1,7 @@
 package StronaSklepowa.Uczelnia.MailMicroservice.Services;
 
 import StronaSklepowa.Uczelnia.DTOs.OrderDTO;
+import StronaSklepowa.Uczelnia.DTOs.ProcessedPaymentDTO;
 import StronaSklepowa.Uczelnia.UserMicroservice.Repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,14 @@ public class MailService {
     private UserRepository userRepository;
 
     @KafkaListener(topics = "mail-events", groupId = "mail-group")
-    public void sendMail(OrderDTO order) {
+    public void sendMail(ProcessedPaymentDTO processedPayment) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("no-reply@cherry-kom.com");
-            message.setTo(order.getCustomerEmail());
-            message.setSubject("Informacja o transakcji: " + order.getId());
+            message.setTo(processedPayment.getOrder().getCustomerEmail());
+            message.setSubject("Informacja o transakcji: " + processedPayment.getOrder().getId());
             message.setText(
-                    "Dzień Dobry.Informujemy o nowej transakcji w sklepie cherry-kom. Koszt transakcji: " + changeGroszeToZlote(order.getTotalAmountInGrosze())
+                    "Dzień Dobry.Informujemy o nowej transakcji w sklepie cherry-kom. Koszt transakcji: " + changeGroszeToZlote(processedPayment.getOrder().getTotalAmountInGrosze())
             );
             mailSender.send(message);
         } catch (Exception ez) {

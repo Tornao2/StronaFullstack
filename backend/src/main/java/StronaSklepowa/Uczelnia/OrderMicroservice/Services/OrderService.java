@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import StronaSklepowa.Uczelnia.PaymentMicroservice.Services.PaymentService;
 import org.springframework.stereotype.Service;
 
 import StronaSklepowa.Uczelnia.DTOs.OrderDTO;
