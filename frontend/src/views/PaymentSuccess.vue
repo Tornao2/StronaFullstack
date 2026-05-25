@@ -5,7 +5,7 @@
       <h1>Płatność zakończona!</h1>
       <p class="subtitle">Twoje zamówienie <strong>#{{ orderId }}</strong> zostało przyjęte. Wysłaliśmy potwierdzenie na Twój adres e-mail.</p>
       <div class="actions">
-        <button class="btn btn-success btn-lg" @click="retry">Spróbuj ponownie</button>
+        <router-link to="/me/orders" class="btn btn-success btn-lg">Zobacz zamówienia</router-link>
         <router-link to="/home" class="btn btn-outline-secondary btn-lg">Wróć do sklepu</router-link>
       </div>
     </div>
@@ -13,13 +13,12 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-const router = useRouter()
+const route = useRoute()
+const orderId = computed(() => route.query.orderId ?? '—')
 
-function retry() {
-  router.back()
-}
 </script>
 
 <style scoped>

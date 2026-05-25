@@ -5,7 +5,7 @@
       <h1>Płatność nieudana</h1>
       <p class="subtitle">Coś poszło nie tak podczas realizacji płatności. Twoje zamówienie nie zostało przetworzone — nic nie zostało pobrane z konta.</p>
       <div class="actions">
-        <router-link to="/me/orders" class="btn btn-danger btn-lg">Zobacz zamówienia</router-link>
+        <button class="btn btn-danger btn-lg" @click="retry">Spróbuj ponownie</button>
         <router-link to="/home" class="btn btn-outline-secondary btn-lg">Wróć do sklepu</router-link>
       </div>
     </div>
@@ -13,11 +13,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
-const route = useRoute()
-const orderId = computed(() => route.query.orderId ?? '—')
+const router = useRouter()
+
+function retry() {
+  router.back()
+}
 </script>
 
 <style scoped>
