@@ -23,3 +23,5 @@ Komenda do włączania słuchania w stripe CLI: ./stripe listen --forward-to loc
 Żeby dostawać maile trzeba do application-local.properties dodać:
 spring.mail.username=<adres email>
 spring.mail.password=<hasło do maila>
+
+Żeby otworzyć Kafka UI i popatrzeć se na eventy na topicach to trzeba docker-compose odpalić i wchodzi się od: http://localhost:2137
