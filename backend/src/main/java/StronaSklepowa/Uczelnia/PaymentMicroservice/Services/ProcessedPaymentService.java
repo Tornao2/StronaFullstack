@@ -17,6 +17,7 @@ public class ProcessedPaymentService {
     public void createCheckoutSession(ProcessedPaymentDTO processedPaymentDTO) {
         updateOrderWithPaymentUrl(processedPaymentDTO.getOrder().getId(), processedPaymentDTO.getUrl());
         kafkaPaymentService.sendMailEvent(processedPaymentDTO);
+        kafkaPaymentService.sendInventoryEvent(processedPaymentDTO.getOrder());
     }
 
     private void updateOrderWithPaymentUrl(Long orderId, String url) {

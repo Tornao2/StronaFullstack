@@ -1,11 +1,11 @@
 <template>
   <div class="result-page">
     <div class="result-card">
-      <div class="icon success-icon">✓</div>
-      <h1>Płatność zakończona!</h1>
-      <p class="subtitle">Twoje zamówienie <strong>#{{ orderId }}</strong> zostało przyjęte. Wysłaliśmy potwierdzenie na Twój adres e-mail.</p>
+      <div class="icon failed-icon">✕</div>
+      <h1>Płatność nieudana</h1>
+      <p class="subtitle">Coś poszło nie tak podczas realizacji płatności. Twoje zamówienie nie zostało przetworzone — nic nie zostało pobrane z konta.</p>
       <div class="actions">
-        <router-link to="/me/orders" class="btn btn-success btn-lg">Zobacz zamówienia</router-link>
+        <router-link to="/me/orders" class="btn btn-danger btn-lg">Zobacz zamówienia</router-link>
         <router-link to="/home" class="btn btn-outline-secondary btn-lg">Wróć do sklepu</router-link>
       </div>
     </div>
@@ -52,8 +52,8 @@ const orderId = computed(() => route.query.orderId ?? '—')
 }
 
 .success-icon {
-  background: #d1fae5;
-  color: #065f46;
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 h1 {

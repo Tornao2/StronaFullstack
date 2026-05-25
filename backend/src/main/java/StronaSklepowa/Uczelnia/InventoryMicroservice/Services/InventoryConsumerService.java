@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InventoryConsumerService {
     private final ProductRepository productRepository;
-    @KafkaListener(topics = "order-events", groupId = "inventory-group")
+    @KafkaListener(topics = "inventory-events", groupId = "inventory-group")
     @Transactional
     public void processInventory(OrderDTO orderDto) {
         for (OrderItemDTO item : orderDto.getItems()) {
