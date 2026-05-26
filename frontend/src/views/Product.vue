@@ -1,6 +1,6 @@
 <template>
   <div class="product-page">
-    <div class="container py-4">
+    <div class="container py-5">
       <div v-if="loading" class="alert alert-secondary">Ladowanie produktu...</div>
       <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
 

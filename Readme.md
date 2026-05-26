@@ -20,7 +20,9 @@ stripe.webhook.secret=W_KEY - to co wypisze po odpaleniu:
 
 Komenda do włączania słuchania w stripe CLI: ./stripe listen --forward-to localhost:8080/api/webhooks/stripe
 
-Żeby dostawać maile trzeba do application-local.properties dodać:
+Żeby dostawać maile trzeba do application-local.properties
+https://myaccount.google.com/apppasswords
+dodać:
 spring.mail.username=<adres email>
 spring.mail.password=<hasło do maila>
 

@@ -1,7 +1,18 @@
 <template>
   <div class="products-page">
     <div class="container py-5">
-      <h1 class="mb-4">{{ pageTitle }}</h1>
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h1 class="mb-0">{{ pageTitle }}</h1>
+
+        <div class="sort-control">
+          <label class="form-label small text-muted mb-1">Sortuj wedlug: </label>
+          <select v-model="sortOrder" class="form-select form-select-sm">
+            <option value="default">Domyslnie</option>
+            <option value="price-asc">Cena: rosnaco</option>
+            <option value="price-desc">Cena: malejaco</option>
+          </select>
+        </div>
+      </div>
 
       <div v-if="loading" class="alert alert-secondary">
         Ladowanie produktow...
@@ -11,13 +22,13 @@
         {{ error }}
       </div>
 
-      <div v-else-if="filteredProducts.length === 0" class="alert alert-warning">
+      <div v-else-if="visibleProducts.length === 0" class="alert alert-warning">
         {{ emptyMessage }}
       </div>
       <!--odstep miedzy produktami -góra i dół-->
       <div v-else class="row g-4" style="row-gap: 2rem;">
         <div
-            v-for="product in filteredProducts"
+            v-for="product in visibleProducts"
             :key="product.id"
             class="col-9 col-md-6 col-xl-4"
         >
@@ -73,8 +84,10 @@ const products = ref([])
 const categories = ref([])
 const loading = ref(false)
 const error = ref('')
+const sortOrder = ref('default')
 
 const searchQuery = computed(() => (route.query.q || '').toString().trim())
+const brandFilter = computed(() => (route.query.brand || '').toString().trim())
 
 const categoryNameMap = {
   '/laptops': 'Laptopy',
@@ -105,9 +118,27 @@ function normalize(text) {
 }
 
 const filteredProducts = computed(() => {
-  if (!searchQuery.value) return products.value
-  const q = normalize(searchQuery.value)
-  return products.value.filter(p => normalize(p.name).includes(q))
+  let list = products.value
+  if (searchQuery.value) {
+    const q = normalize(searchQuery.value)
+    list = list.filter(p => normalize(p.name).includes(q))
+  }
+  if (brandFilter.value) {
+    const b = normalize(brandFilter.value)
+    list = list.filter(p => normalize(p.name).includes(b))
+  }
+  return list
+})
+
+function priceOf(p) {
+  return p.priceInGrosze ?? p.price_in_grosze ?? 0
+}
+
+const visibleProducts = computed(() => {
+  const list = [...filteredProducts.value]
+  if (sortOrder.value === 'price-asc') list.sort((a, b) => priceOf(a) - priceOf(b))
+  else if (sortOrder.value === 'price-desc') list.sort((a, b) => priceOf(b) - priceOf(a))
+  return list
 })
 
 function shortText(text) {
@@ -196,6 +227,10 @@ watch(() => route.fullPath, loadProducts)
   width: 100%;
   height: 240px;
   object-fit: cover;
+}
+
+.sort-control {
+  min-width: 200px;
 }
 
 .no-image {

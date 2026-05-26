@@ -1,6 +1,23 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
-const items = ref([])
+const STORAGE_KEY = 'cart-items'
+
+function loadInitial() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY)
+        return raw ? JSON.parse(raw) : []
+    } catch {
+        return []
+    }
+}
+
+const items = ref(loadInitial())
+
+watch(items, (val) => {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(val))
+    } catch {}
+}, { deep: true })
 
 export function useCart() {
 
