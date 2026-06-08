@@ -10,14 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProcessedPaymentService {
-    private final KafkaPaymentService kafkaPaymentService;
     private final OrderRepository orderRepository;
 
     @KafkaListener(topics = "processedpayment-event", groupId = "payment-group")
     public void createCheckoutSession(ProcessedPaymentDTO processedPaymentDTO) {
         updateOrderWithPaymentUrl(processedPaymentDTO.getOrder().getId(), processedPaymentDTO.getUrl());
-        kafkaPaymentService.sendMailEvent(processedPaymentDTO);
-        kafkaPaymentService.sendInventoryEvent(processedPaymentDTO.getOrder());
     }
 
     private void updateOrderWithPaymentUrl(Long orderId, String url) {

@@ -19,7 +19,7 @@ public class KafkaPaymentService {
         kafkaTemplate.send("inventory-events", orderDto);
     }
 
-    public void sendMailEvent(ProcessedPaymentDTO processedPaymentDTO) {
-        kafkaTemplate.send("mail-events", processedPaymentDTO);
+    public void sendMailEvent(OrderDTO orderDTO) {
+        kafkaTemplate.send("mail-events", orderDTO);
     }
 }

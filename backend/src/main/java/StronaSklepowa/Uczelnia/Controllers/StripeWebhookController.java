@@ -1,5 +1,8 @@
 package StronaSklepowa.Uczelnia.Controllers;
 
+import StronaSklepowa.Uczelnia.DTOs.OrderDTO;
+import StronaSklepowa.Uczelnia.OrderMicroservice.Entities.Order;
+import StronaSklepowa.Uczelnia.OrderMicroservice.Services.OrderService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +12,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 import StronaSklepowa.Uczelnia.OrderMicroservice.Entities.OrderStatus;
 import StronaSklepowa.Uczelnia.OrderMicroservice.Repositories.OrderRepository;
+import StronaSklepowa.Uczelnia.PaymentMicroservice.Services.KafkaPaymentService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -17,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 public class StripeWebhookController {
 
     private final OrderRepository orderRepository;
+    private final KafkaPaymentService kafkaPaymentService;
+    private final OrderService orderService;
+
 
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
@@ -53,6 +60,9 @@ public class StripeWebhookController {
             orderRepository.findById(orderId).ifPresent(order -> {
                 order.setStatus(status);
                 orderRepository.save(order);
+                updateInventory(order);
+                sendMail(order);
+
             });
         } catch (Exception e) {
             System.err.println("Błąd aktualizacji statusu dla ID: " + orderIdStr);
@@ -62,5 +72,13 @@ public class StripeWebhookController {
     private Session getSession(Event event) {
         return (Session) event.getDataObjectDeserializer().getObject()
                 .orElseGet(() -> (Session) event.getData().getObject());
+    }
+
+    private void updateInventory(Order order) {
+        kafkaPaymentService.sendInventoryEvent(orderService.mapOrderToDTO(order));
+    }
+
+    private void sendMail(Order order) {
+        kafkaPaymentService.sendMailEvent(orderService.mapOrderToDTO(order));
     }
 }

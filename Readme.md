@@ -26,4 +26,8 @@ dodać:
 spring.mail.username=<adres email>
 spring.mail.password=<hasło do maila>
 
-Żeby otworzyć Kafka UI i popatrzeć se na eventy na topicach to trzeba docker-compose odpalić i wchodzi się od: http://localhost:2137
+Żeby otworzyć Kafka UI i popatrzeć se na eventy na topicach to trzeba docker-compose.yml odpalić i wchodzi się od: http://localhost:2137
+
+Żeby działał webhook stripe to trzeba:
+zainstalować stripe cli: npm i -g @stripe/cli
+odpalić go przy użyciu: stripe listen --forward-to localhost:8080/api/webhooks/stripe tam wypluje nam klucz zaczynający sie od: whsec_ i go do application-local.properties i go do stripe.webhook.secret

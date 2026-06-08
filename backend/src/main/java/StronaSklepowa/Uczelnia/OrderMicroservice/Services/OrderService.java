@@ -98,7 +98,7 @@ public class OrderService {
         return mapOrderToDTO(order);
     }
 
-    private OrderDTO mapOrderToDTO(Order order) {
+    public OrderDTO mapOrderToDTO(Order order) {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId());
         dto.setOrderDate(order.getOrderDate());

@@ -19,14 +19,14 @@ public class MailService {
     private UserRepository userRepository;
 
     @KafkaListener(topics = "mail-events", groupId = "mail-group")
-    public void sendMail(ProcessedPaymentDTO processedPayment) {
+    public void sendMail(OrderDTO orderDTO) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("no-reply@cherry-kom.com");
-            message.setTo(processedPayment.getOrder().getCustomerEmail());
-            message.setSubject("Informacja o transakcji: " + processedPayment.getOrder().getId());
+            message.setTo(orderDTO.getCustomerEmail());
+            message.setSubject("Informacja o transakcji: " + orderDTO.getId());
             message.setText(
-                    "Dzień Dobry.Informujemy o nowej transakcji w sklepie cherry-kom. Koszt transakcji: " + changeGroszeToZlote(processedPayment.getOrder().getTotalAmountInGrosze())
+                    "Dzień Dobry.Informujemy o nowej transakcji w sklepie cherry-kom. Koszt transakcji: " + changeGroszeToZlote(orderDTO.getTotalAmountInGrosze())
             );
             mailSender.send(message);
         } catch (Exception ez) {
